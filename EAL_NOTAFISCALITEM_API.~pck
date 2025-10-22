@@ -14,11 +14,20 @@ create or replace package EAL_NOTAFISCALITEM_API is
 
    function get___(
       item in EAL_NotaFiscalItem_Tab.Item%type
-   )return EAL_NotaFiscalItem_Tab%rowtype;
+   ) return EAL_NotaFiscalItem_Tab%rowtype;
 
     function CalculaValorTotalLinha(
-       item in EAL_NotaFiscalItem_Tab.Item%type
-    )return number;
+      item in EAL_NotaFiscalItem_Tab.Item%type
+   )return number;
+
+---    function CalculaICMS(
+---      item in EAL_NotaFiscalItem_Tab.Item%type
+---   )return number;
+
+
+---    function Calculaalpi(
+---      item in EAL_NotaFiscalItem_Tab.Item%type
+---  )return number;
 
 
 end EAL_NOTAFISCALITEM_API;
@@ -65,7 +74,7 @@ create or replace package body EAL_NOTAFISCALITEM_API is
    ) is
    begin
       delete from EAL_NOTAFISCALITEM_TAB
-      where item = item;
+      where item = EAL_NOTAFISCALITEM_TAB.item;
    end delete___;
 
    function get___(
@@ -84,7 +93,7 @@ create or replace package body EAL_NOTAFISCALITEM_API is
       item in EAL_NotaFiscalItem_Tab.Item%type
    )return number
    is
-     ret number(20);
+     ret number;
    begin
 
      select sum(preco) as sum_preco into ret from EAL_NotaFiscalItem_Tab
@@ -92,7 +101,8 @@ create or replace package body EAL_NOTAFISCALITEM_API is
      return ret;
 
    end CalculaValorTotalLinha;
- 
+
+
 
 end EAL_NOTAFISCALITEM_API;
 /

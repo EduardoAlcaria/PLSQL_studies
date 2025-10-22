@@ -14,11 +14,20 @@ create or replace package EAL_NOTAFISCALITEM_API is
 
    function get___(
       item in EAL_NotaFiscalItem_Tab.Item%type
-   )return EAL_NotaFiscalItem_Tab%rowtype;
+   ) return EAL_NotaFiscalItem_Tab%rowtype;
 
     function CalculaValorTotalLinha(
-       item in EAL_NotaFiscalItem_Tab.Item%type
-    )return number;
+      item in EAL_NotaFiscalItem_Tab.Item%type
+   )return number;
+
+---    function CalculaICMS(
+---      item in EAL_NotaFiscalItem_Tab.Item%type
+---   )return number;
+
+
+---    function Calculaalpi(
+---      item in EAL_NotaFiscalItem_Tab.Item%type
+---  )return number;
 
 
 end EAL_NOTAFISCALITEM_API;
@@ -92,8 +101,8 @@ create or replace package body EAL_NOTAFISCALITEM_API is
      return ret;
 
    end CalculaValorTotalLinha;
-   
-  
+
+
 
 end EAL_NOTAFISCALITEM_API;
 /
