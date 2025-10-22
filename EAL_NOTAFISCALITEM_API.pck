@@ -20,9 +20,10 @@ create or replace package EAL_NOTAFISCALITEM_API is
       item in EAL_NotaFiscalItem_Tab.Item%type
    )return number;
 
----    function CalculaICMS(
----      item in EAL_NotaFiscalItem_Tab.Item%type
----   )return number;
+     function CalculaIcms(
+       nfi EAL_NOTAFISCALITEM_TAB%rowtype,
+       nf EAL_NOTAFISCAL_TAAB%rowtype
+      )return number;
 
 
 ---    function Calculaalpi(
@@ -101,6 +102,25 @@ create or replace package body EAL_NOTAFISCALITEM_API is
      return ret;
 
    end CalculaValorTotalLinha;
+   
+ 
+     function CalculaIcms(
+        nfi EAL_NOTAFISCALITEM_TAB%rowtype,
+        nf EAL_NOTAFISCAL_TAAB%rowtype
+        
+       )return number
+       is
+         vValor number;
+         begin
+           select (nfi.icmsperc / 100) * (nfi.Preco * nfi.QtyVenda)
+           into vValor
+           from EAL_NOTAFISCALITEM_TAB
+           where nfi.item = nf.fiscal_note
+           and nf.fiscal_note = nfi.notafiscal;
+
+           return vValor;
+         end CalculaIcms;
+
 
 
 
