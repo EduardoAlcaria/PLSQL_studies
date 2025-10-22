@@ -1,0 +1,75 @@
+create or replace package EAL_CLIENTE_API is
+   procedure new___(
+      cliente in EAL_Cliente_Tab%rowtype
+   );
+
+   procedure modify___(
+      cliente in EAL_Cliente_Tab%rowtype
+   );
+
+   procedure remove___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   );
+
+   function get___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return EAL_Cliente_Tab%rowtype;
+end EAL_CLIENTE_API;
+/
+create or replace package body EAL_CLIENTE_API is
+
+   procedure new___(
+      cliente in EAL_CLIENTE_TAB%rowtype
+   ) is
+   begin
+      insert into EAL_CLIENTE_TAB
+      values (
+         cliente.cod_cliente,
+         cliente.cod_cidade,
+         cliente.cod_estado,
+         cliente.cod_pais,
+         cliente.cliente_name,
+         cliente.cpf,
+         cliente.rg,
+         cliente.ativo
+      );
+   end new___;
+
+   procedure modify___(
+      cliente in EAL_CLIENTE_TAB%rowtype
+   ) is
+   begin
+      update EAL_CLIENTE_TAB
+      set
+         cod_cidade = cliente.cod_cidade,
+         cod_estado = cliente.cod_estado,
+         cod_pais = cliente.cod_pais,
+         cliente_name = cliente.cliente_name,
+         cpf = cliente.cpf,
+         rg = cliente.rg,
+         ativo = cliente.ativo
+      where cod_cliente = cliente.cod_cliente;
+   end modify___;
+
+   procedure remove___(
+      cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) is
+   begin
+      delete from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+   end remove___;
+
+   function get___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return EAL_CLIENTE_TAB%rowtype
+   is
+      ret EAL_CLIENTE_TAB%rowtype;
+   begin
+      select * into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get___;
+
+end EAL_CLIENTE_API;
+/

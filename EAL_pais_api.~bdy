@@ -1,0 +1,14 @@
+create or replace package body EAL_pais_api is
+
+          procedure new___ (
+             pais in Eal_Pais_Tab%rowtype
+
+          )
+          is
+          begin
+             insert into Eal_Pais_Tab
+             values
+             (pais.cod_pais, pais.desc_pais, pais.cod_area_fone);
+        end new___;
+end EAL_Pais_API;
+/
