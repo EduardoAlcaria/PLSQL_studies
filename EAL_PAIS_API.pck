@@ -15,12 +15,19 @@ create or replace package EAL_PAIS_API is
        function get___(
          code_pais in Eal_pais_tab.Cod_Pais%type
        ) return Eal_pais_tab%rowtype;
+       
+       
+      
+        function get_desc___(
+         code_pais in Eal_pais_tab.Cod_Pais%type
+       ) return varchar2;
+       
+       
+        function get_fone___(
+         code_pais in Eal_pais_tab.Cod_Pais%type
+       ) return varchar2;
+       
 
-
-
-      function getID___(
-          cod_pais in Eal_Pais_Tab.cod_pais%type
-      )return Eal_Area_Tab.Cod_Area%type;
 
 end EAL_PAIS_API;
 /
@@ -32,9 +39,13 @@ create or replace package body EAL_pais_api is
           )
           is
           begin
-             insert into Eal_Pais_Tab
-             values
-             (pais.cod_pais, pais.desc_pais, pais.cod_area_fone);
+            if pais.cod_pais is not null and
+               pais.desc_pais is not null and
+                pais.cod_area_fone is not null then
+               insert into Eal_Pais_Tab 
+               values
+               (pais.cod_pais, pais.desc_pais, pais.cod_area_fone);
+            end if;
         end new___;
 
         procedure modify___(
@@ -42,13 +53,16 @@ create or replace package body EAL_pais_api is
         )
         is
         begin
-          update Eal_Pais_Tab
-            set
-            Eal_Pais_Tab.Desc_Pais = pais.desc_pais,
-            Eal_Pais_Tab.Cod_Area_Fone = pais.cod_area_fone
+           if pais.cod_pais is not null and
+               pais.desc_pais is not null and
+               pais.cod_area_fone is not null then
+              update Eal_Pais_Tab
+                set
+                Eal_Pais_Tab.Desc_Pais = pais.desc_pais,
+                Eal_Pais_Tab.Cod_Area_Fone = pais.cod_area_fone
 
-           where Eal_Pais_tab.cod_pais = pais.cod_pais;
-
+               where Eal_Pais_tab.cod_pais = pais.cod_pais;
+           end if;
         end modify___;
 
 
@@ -77,18 +91,35 @@ create or replace package body EAL_pais_api is
 
        end get___;
 
-       function getID___(
-          cod_pais  in Eal_Pais_Tab.cod_pais%type
-      )return Eal_Area_Tab.Cod_Area%type
+     
+      
+       function get_desc___(
+          code_pais in Eal_Pais_Tab.cod_pais%type
+      )return varchar2
        is
-          ret_cod Eal_Pais_Tab.Cod_Pais%type;
+          ret varchar2(255);
 
        begin
-          select Eal_Pais_Tab.Cod_Pais into ret_cod
+          select desc_pais into ret
           from EAL_PAIS_TAB
-          where cod_pais = Eal_Pais_Tab.Cod_Pais;
-          return ret_cod;
-      end getId___;
+          where code_pais = Eal_Pais_Tab.Cod_Pais;
+          return ret;
+      end get_desc___;
+      
+      function get_fone___(
+         code_pais in Eal_pais_tab.Cod_Pais%type
+       ) return varchar2
+       is
+        ret varchar2(255);
+       begin
+         select code_pais into ret
+         from EAL_PAIS_TAB
+         where code_pais = Eal_Pais_Tab.Cod_Pais;
+         return ret;
+         
+      end get_fone___;
+       
+      
 
 end EAL_Pais_API;
 /

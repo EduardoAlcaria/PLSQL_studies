@@ -14,49 +14,122 @@ create or replace package EAL_ESTADO_API is
    function get___(
       cod_estado in EAL_Estado_Tab.Cod_Estado%type
    ) return EAL_Estado_Tab%rowtype;
+    
+     function get_pais___(
+      cod_estado in EAL_estado_Tab.Cod_estado%type
+   )
+    return varchar2;
+    
+     function get_desc___(
+      cod_estado in EAL_estado_Tab.Cod_estado%type
+   )
+    return varchar2;
+    
+    
+     function get_areaFone___(
+      cod_estado in EAL_estado_Tab.Cod_estado%type
+   )
+    return varchar2;
+    
 
 end EAL_ESTADO_API;
 /
 create or replace package body EAL_ESTADO_API is
-
    procedure new___(
-      estado in EAL_ESTADO_TAB%rowtype
-   ) is
+      estado in EAL_Estado_Tab%rowtype
+   )is
    begin
-      insert into EAL_ESTADO_TAB
-      values (estado.cod_estado, estado.cod_pais, estado.desc_estado, estado.cod_area_fone);
+     if  estado.cod_estado is not null and 
+         estado.cod_pais is not null and 
+         estado.desc_estado is not null and
+         estado.cod_area_fone is not null then
+          insert into EAL_ESTADO_TAB
+          values (
+             estado.cod_estado,
+             estado.cod_pais,
+             estado.desc_estado,
+             estado.cod_area_fone
+          );
+     end if;     
    end new___;
 
    procedure modify___(
-      item in EAL_ESTADO_TAB%rowtype
-   ) is
+      estado in EAL_Estado_Tab%rowtype
+   )is
    begin
-      update EAL_ESTADO_TAB
-      set
-         cod_pais = estado.cod_pais,
-         desc_estado = estado.desc_estado,
-         cod_area_fone = item.cod_area_fone
-      where cod_estado = item.cod_estado;
+     if  estado.cod_estado is not null and 
+         estado.cod_pais is not null and 
+         estado.desc_estado is not null and
+         estado.cod_area_fone is not null then
+          update EAL_estado_TAB
+          set
+             cod_estado = estado.cod_estado,
+             cod_pais = estado.cod_pais,
+             desc_estado = estado.desc_estado,
+             cod_area_fone = estado.cod_area_fone
+          where cod_estado = estado.cod_estado;
+     end if;     
    end modify___;
 
    procedure delete___(
-      cod_estado in EAL_ESTADO_TAB.cod_estado%type
-   ) is
+      cod_estado in EAL_Estado_Tab.Cod_Estado%type
+   )
+   is
    begin
-      delete from EAL_ESTADO_TAB
-      where cod_estado = EAL_estado_tab.cod_estado;
+      delete from EAL_estado_TAB
+      where cod_estado = EAL_estado_TAB.cod_estado;
    end delete___;
 
+
    function get___(
-      cod_estado in EAL_ESTADO_TAB.cod_estado%type
-   ) return EAL_ESTADO_TAB%rowtype
+      cod_estado in EAL_Estado_Tab.Cod_Estado%type
+   ) return EAL_Estado_Tab%rowtype
    is
-      ret EAL_ESTADO_TAB%rowtype;
+      ret EAL_estado_TAB%rowtype;
    begin
-      select * into ret from EAL_ESTADO_TAB
-      where cod_estado = EAL_ESTADO_TAB.cod_estado;
+      select * into ret from EAL_Estado_TAB
+      where cod_estado = EAL_estado_TAB.cod_estado;
       return ret;
    end get___;
-
-end EAL_ESTADO_API;
+   
+     function get_pais___(
+      cod_estado in EAL_estado_Tab.Cod_estado%type
+   )
+    return varchar2
+    is
+     ret varchar2(255);
+    begin
+      select cod_pais into ret from EAL_ESTADO_TAB
+      where cod_estado = EAL_ESTADO_TAB.COD_estado;
+      return ret;
+   end get_pais___;
+   
+   
+    function get_desc___(
+      cod_estado in EAL_estado_Tab.Cod_estado%type
+   )
+    return varchar2
+    is
+     ret varchar2(255);
+    begin
+      select desc_estado into ret from EAL_ESTADO_TAB
+      where cod_estado = EAL_ESTADO_TAB.COD_ESTADO;
+      return ret;
+    end get_desc___;
+    
+     function get_areaFone___(
+      cod_estado in EAL_estado_Tab.Cod_estado%type
+   )
+    return varchar2
+    is
+      ret varchar2(255);
+    begin
+      select cod_area_fone into ret from EAL_ESTADO_TAB
+      where cod_estado = EAL_ESTADO_TAB.cod_estado;
+      return ret;
+      
+    end get_areaFone___;
+   
+   
+end EAL_ESTADO_API;   
 /

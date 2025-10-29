@@ -1,42 +1,46 @@
 create or replace package body EAL_ESTADO_API is
-
    procedure new___(
-      item in EAL_ESTADO_TAB%rowtype
-   ) is
+      estado in EAL_Estado_Tab%rowtype
+   )is
    begin
       insert into EAL_ESTADO_TAB
-      values (item.cod_estado, item.cod_pais, item.desc_estado, item.cod_area_fone);
+      values (
+         estado.cod_estado,
+         estado.cod_pais,
+         estado.desc_estado,
+         estado.cod_area_fone
+      );
    end new___;
 
    procedure modify___(
-      item in EAL_ESTADO_TAB%rowtype
-   ) is
+      estado in EAL_Estado_Tab%rowtype
+   )is
    begin
-      update EAL_ESTADO_TAB
+      update EAL_estado_TAB
       set
-         cod_pais = item.cod_pais,
-         desc_estado = item.desc_estado,
-         cod_area_fone = item.cod_area_fone
-      where cod_estado = item.cod_estado;
+         cod_estado = estado.cod_estado,  
+         cod_pais = estado.cod_pais,
+         desc_estado = estado.desc_estado,
+         cod_area_fone = estado.cod_area_fone
+      where cod_emp_id = empresa.cod_emp_id;
    end modify___;
 
    procedure delete___(
-      cod_estado in EAL_ESTADO_TAB.cod_estado%type
-   ) is
-   begin
-      delete from EAL_ESTADO_TAB
-      where cod_estado = delete___cod_estado;
+      cod_estado in EAL_Estado_Tab.Cod_Estado%type
+   )begin
+      delete from EAL_estado_TAB
+      where cod_estado = EAL_estado_TAB.cod_estado;
    end delete___;
 
+
    function get___(
-      cod_estado in EAL_ESTADO_TAB.cod_estado%type
-   ) return EAL_ESTADO_TAB%rowtype
+      cod_estado in EAL_Estado_Tab.Cod_Estado%type
+   ) return EAL_Estado_Tab%rowtype
    is
-      ret EAL_ESTADO_TAB%rowtype;
+      ret EAL_estado_TAB%rowtype;
    begin
-      select * into ret from EAL_ESTADO_TAB
-      where cod_estado = get___cod_estado;
+      select * into ret from EAL_Estado_TAB
+      where cod_estado = EAL_estado_TAB.cod_estado;
       return ret;
    end get___;
-
-end EAL_ESTADO_API;
+;

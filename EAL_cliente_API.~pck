@@ -1,24 +1,59 @@
-create or replace package EAL_cliente_API is
+create or replace package EAL_CLIENTE_API is
+   procedure new___(
+      cliente in EAL_Cliente_Tab%rowtype
+   );
 
-       procedure new___(
-          cliente in Eal_cliente_Tab%rowtype
+   procedure modify___(
+      cliente in EAL_Cliente_Tab%rowtype
+   );
 
-       );
+   procedure remove___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   );
 
-       procedure modify___(
-         cliente Eal_cliente_tab%rowtype
-       );
-
-       procedure remove___ (
-         cliente_id in Eal_cliente_tab.Cod_cliente%type
-       );
-
-       function get___(
-         cliente_id in Eal_cliente_tab.Cod_cliente%type
-         
-       )return Eal_Cliente_tab%rowtype;
-
-end EAL_cliente_API;
+   function get___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return EAL_Cliente_Tab%rowtype;
+   
+    function get_estado___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return number;
+   
+    function get_pais___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return number;
+   
+    function get_cidade___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return number;
+   
+    function get_nome___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return varchar2;
+   
+   
+    function get_cpf___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return varchar2;
+   
+   
+    function get_rg___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return varchar2;
+   
+    function get_ativo___(
+      cod_cliente in EAL_Cliente_Tab.Cod_Cliente%type
+   )
+   return varchar2;
+   
+end EAL_CLIENTE_API;
 /
 create or replace package body EAL_CLIENTE_API is
 
@@ -56,23 +91,109 @@ create or replace package body EAL_CLIENTE_API is
    end modify___;
 
    procedure remove___(
-      cliente_id in EAL_CLIENTE_TAB.cod_cliente%type
+      cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
    ) is
    begin
       delete from EAL_CLIENTE_TAB
-      where cliente_id = EAL_CLIENTE_TAB.cod_cliente;
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
    end remove___;
 
    function get___(
-      cliente_id in EAL_CLIENTE_TAB.cod_cliente%type
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
    ) return EAL_CLIENTE_TAB%rowtype
    is
       ret EAL_CLIENTE_TAB%rowtype;
    begin
       select * into ret from EAL_CLIENTE_TAB
-      where cliente_id = EAL_CLIENTE_TAB.cod_cliente;
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
       return ret;
    end get___;
+   
+   
+    function get_estado___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return number
+   is
+      ret number;
+   begin
+      select cod_estado into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_estado___;
+   
+   function get_pais___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return number
+   is
+      ret number;
+   begin
+      select cod_pais into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_pais___;
+   
+   function get_cidade___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return number
+   is
+      ret number;
+   begin
+      select cod_cidade into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_cidade___;
+   
+   function get_nome___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return varchar2
+   is
+      ret varchar2(255);
+   begin
+      select cliente_name into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_nome___;
+   
+   function get_cpf___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return varchar2
+   is
+      ret varchar2(255);
+   begin
+      select cpf into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_cpf___;
+   
+   function get_rg___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return varchar2
+   is
+      ret varchar2(255);
+   begin
+      select rg into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_rg___;
+   
+   function get_ativo___(
+       cod_cliente in EAL_CLIENTE_TAB.cod_cliente%type
+   ) return varchar2
+   is
+      ret varchar2(255);
+   begin
+      select ativo into ret from EAL_CLIENTE_TAB
+      where  cod_cliente = EAL_CLIENTE_TAB.cod_cliente;
+      return ret;
+   end get_ativo___;
+   
+   
+   
+   
+   
+   
+   
+   
 
 end EAL_CLIENTE_API;
 /

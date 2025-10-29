@@ -1,15 +1,20 @@
 declare
-    vPais EAL_PAIS_TAB%rowtype;
-    ret EAL_pais_tab%rowtype;
+    fiscal EAL_notafiscal_TAAB%rowtype;
+    retEST varchar2(255);
+
 begin
-  
-    vPais.cod_pais := '4' ;
-    vPais.desc_pais := 'pais legal parte 2';
-    vPais.cod_area_fone := '51';
-    EAL_PAIS_API.modify___(vPais);
-   
-    select * from EAL_PAIS;
-    select * from EAL_NOTAFISCALITEM;
-    eal_notafiscalitem.VALORTOTALTEM()
+    
+ fiscal.fiscal_note := 5;
+ fiscal.serialnf := 112313;
+ fiscal.cfop := 12312;
+ fiscal.valortotal := 1;
+
+ 
+ EAL_notafiscal_API.new___(fiscal);
+
+
+
+
+
 end;
 /

@@ -89,7 +89,8 @@ create table EAL_produto_tab( --- feito
 
 
 create table EAL_notafiscalitem_tab(  --- feito
-      item number(20) primary key,
+      item number(20),
+      nf number(20),
       notafiscal number(25),
       codigoProduto varchar2(255),    
       qtyVenda number(20),
@@ -98,8 +99,10 @@ create table EAL_notafiscalitem_tab(  --- feito
       valorIcms number(20),
       valorIpi number(20),
       valorTotalTem number(20),
+      CONSTRAINT pknotafiscal PRIMARY KEY (item, nf),
       foreign key (notafiscal) references EAL_notafiscal_taab(fiscal_note),
       foreign key (codigoProduto) references EAL_produto_tab(codigo_produto)
+
 );
 
 
