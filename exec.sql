@@ -1,20 +1,13 @@
 declare
     fiscal EAL_notafiscal_TAAB%rowtype;
+    estoque EAL_ESTOQUE_TAB%rowtype;
     retEST varchar2(255);
-
+    ret varchar2(32);
 begin
-    
- fiscal.fiscal_note := 5;
- fiscal.serialnf := 112313;
- fiscal.cfop := 12312;
- fiscal.valortotal := 1;
 
+ ret := EAL_CLIENTE_API.valida_cpf('111.444.777-35');
+ dbms_output.put_line(ret);
  
- EAL_notafiscal_API.new___(fiscal);
-
-
-
-
-
+ 
 end;
 /
