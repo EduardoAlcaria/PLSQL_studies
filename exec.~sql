@@ -1,23 +1,13 @@
 declare
-    cidade EAL_CIDADE_TAB%rowtype;
+    fiscal EAL_notafiscal_TAAB%rowtype;
+    estoque EAL_ESTOQUE_TAB%rowtype;
     retEST varchar2(255);
-
+    ret varchar2(32);
 begin
-    
- cidade.cod_cidade := 0;
- cidade.cod_estado := 1;
- cidade.cod_pais := 22;
- cidade.cod_pais := 'porto rusena';
+
+ ret := EAL_CLIENTE_API.valida_cpf('11112');
+ dbms_output.put_line(ret);
  
- EAL_CIDADE_API.new___(cidade);
-
-
- select * from EAL_CIDADE_TAB;
-
-            
-  
-
-
-
+ 
 end;
 /
