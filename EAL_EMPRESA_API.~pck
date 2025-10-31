@@ -44,31 +44,48 @@ create or replace package body EAL_EMPRESA_API is
       empresa in EAL_EMPRESA_TAB%rowtype
    ) is
    begin
-      insert into EAL_EMPRESA_TAB
-      values (
-         empresa.cod_emp_id,
-         empresa.cod_cidade,
-         empresa.razao_social,
-         empresa.endereco,
-         empresa.cep,
-         empresa.cnpj,
-         empresa.complemento
-      );
+     if empresa.cod_emp_id is not null and
+         empresa.cod_cidade is not null and
+         empresa.razao_social is not null and
+         empresa.endereco is not null and 
+         empresa.cep is not null and 
+         empresa.cnpj is not null and 
+         empresa.complemento is not null then
+          insert into EAL_EMPRESA_TAB
+          values (
+             empresa.cod_emp_id,
+             empresa.cod_cidade,
+             empresa.razao_social,
+             empresa.endereco,
+             empresa.cep,
+             empresa.cnpj,
+             empresa.complemento
+          );
+      end if;    
    end new___;
 
    procedure modify___(
       empresa in EAL_EMPRESA_TAB%rowtype
    ) is
    begin
-      update EAL_EMPRESA_TAB
-      set
-         cod_cidade = empresa.cod_cidade,
-         razao_social = empresa.razao_social,
-         endereco = empresa.endereco,
-         cep = empresa.cep,
-         cnpj = empresa.cnpj,
-         complemento = empresa.complemento
-      where cod_emp_id = empresa.cod_emp_id;
+      if empresa.cod_emp_id is not null and
+         empresa.cod_cidade is not null and
+         empresa.razao_social is not null and
+         empresa.endereco is not null and 
+         empresa.cep is not null and 
+         empresa.cnpj is not null and 
+         empresa.complemento is not null then
+            update EAL_EMPRESA_TAB
+            set
+               cod_cidade = empresa.cod_cidade,
+               razao_social = empresa.razao_social,
+               endereco = empresa.endereco,
+               cep = empresa.cep,
+               cnpj = empresa.cnpj,
+               complemento = empresa.complemento
+            where cod_emp_id = empresa.cod_emp_id;
+            
+      end if;      
    end modify___;
 
    procedure delete___(
