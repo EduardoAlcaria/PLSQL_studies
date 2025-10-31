@@ -1,44 +1,9 @@
-create or replace package EAL_NOTAFISCAL_API is
-   procedure new___(
-      nf in EAL_NotaFiscal_Taab%rowtype
-   );
-
-   procedure modify___(
-      nf in EAL_NotaFiscal_Taab%rowtype
-   );
-
-   procedure delete___(
-      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
-   );
-
-   function get___(
-      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
-   ) return EAL_NOTAFISCAL_TAAB%rowtype;
-   
-   function get_serial___(
-      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
-    )return varchar2; 
-    
-   function get_cFop___(
-      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
-    )return varchar2; 
-    
-   function get_valorTotal___(
-      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
-   )return number; 
-        
-    
-
-end EAL_NOTAFISCAL_API;
-/
 create or replace package body EAL_NOTAFISCAL_API is
 
    procedure new___(
       nf in EAL_NOTAFISCAL_TAAB%rowtype
    ) is
    begin
-     
-    
      if  nf.fiscal_note is not null and 
          nf.serialNF   is not null and 
          nf.cFop   is not null and 
@@ -124,9 +89,8 @@ create or replace package body EAL_NOTAFISCAL_API is
       fetch first 1 row only;
       return ret;
 
-   
-   
    end get_valorTotal___;
+   
    
 end EAL_NOTAFISCAL_API;
 /

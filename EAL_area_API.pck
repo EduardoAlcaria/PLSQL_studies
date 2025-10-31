@@ -1,0 +1,95 @@
+create or replace package EAL_area_API is
+
+       procedure new___(
+          area in Eal_area_Tab%rowtype
+
+       );
+
+       procedure modify___(
+         area_table in Eal_area_tab%rowtype
+       );
+
+       procedure remove___ (
+         id in Eal_area_tab.Cod_area%type 
+       );
+
+       function get___(
+         id in Eal_area_tab.Cod_area%type
+         
+       ) return Eal_area_tab%rowtype;
+       
+ 
+     function get_desc___(
+        id in EAL_AREA_TAB.COD_AREA%type
+     )return varchar2;
+   
+   
+
+end  EAL_area_API;
+/
+create or replace package body EAL_area_API is
+
+       procedure new___(
+          area in Eal_area_Tab%rowtype
+       )
+       is
+       begin
+         if  area.cod_area is not null and area.desc_area is not null then
+           
+             insert into EAL_AREA_TAB values (
+             area.cod_area,
+             area.desc_area
+            );
+        end if;    
+
+      end new___;
+
+
+       procedure modify___(
+        area_table in EAL_AREA_TAB%rowtype
+       ) is
+       begin
+          if area_table.cod_area is not null and area_table.desc_area is not null then
+            update EAL_AREA_TAB
+            set
+               cod_area = area_table.cod_area,
+               desc_area = area_table.desc_area
+            where cod_area = area_table.cod_area;
+          end if;
+       end modify___;
+
+
+       procedure remove___ (
+         id in Eal_area_tab.Cod_area%type
+       )is
+        begin
+           delete from EAL_area_TAB
+           where id = EAL_area_TAB.cod_area;
+       end remove___;
+
+       function get___(
+        id in EAL_area_TAB.cod_area%type
+       ) return EAL_area_TAB%rowtype
+       is
+          ret EAL_area_TAB%rowtype;
+       begin
+          select * into ret from EAL_area_TAB
+          where id = EAL_area_TAB.cod_area;
+          return ret;
+       end get___;
+       
+       
+       function get_desc___(
+        id in EAL_area_TAB.cod_Area %type
+      )return varchar2
+      is
+       ret varchar2(255);
+      begin
+        select desc_area into ret from EAL_AREA_TAB
+        where id = EAL_AREA_TAB.cod_area;
+        return ret;
+        
+        end get_desc___;
+       
+end  EAL_area_API;       
+/

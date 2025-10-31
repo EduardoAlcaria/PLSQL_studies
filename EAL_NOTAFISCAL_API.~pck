@@ -37,8 +37,6 @@ create or replace package body EAL_NOTAFISCAL_API is
       nf in EAL_NOTAFISCAL_TAAB%rowtype
    ) is
    begin
-     
-    
      if  nf.fiscal_note is not null and 
          nf.serialNF   is not null and 
          nf.cFop   is not null and 
