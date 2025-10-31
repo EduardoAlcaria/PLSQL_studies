@@ -23,6 +23,10 @@ create or replace package EAL_PRODUTO_API is
      codigo_produto in EAL_produto_tab.Codigo_Produto%type
    ) return number;
 
+  procedure product_collection(
+   tab out EAL_PRODUCT_TYPE_TAB
+  );
+
 end EAL_PRODUTO_API;
 /
 create or replace package body EAL_PRODUTO_API is
@@ -102,5 +106,18 @@ create or replace package body EAL_PRODUTO_API is
      return ret;
    
    end get_preco___;
+   
+   
+   
+   procedure product_collection(
+    tab out EAL_PRODUCT_TYPE_TAB  
+   )
+   is
+   begin
+     select EAL_PRODUCT_TYPE(codigo_produto, descprduto, preco)
+     bulk collect into tab
+     from EAL_PRODUTO_TAB;
+     
+   end product_collection;
 end EAL_PRODUTO_API;
 /

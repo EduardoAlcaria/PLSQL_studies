@@ -53,6 +53,18 @@ create or replace package EAL_CLIENTE_API is
    )
    return varchar2;
    
+   
+    function valida_cpf(
+      cpf in EAL_Cliente_Tab.cpf%type
+   )
+   return varchar2;
+   
+   function formata_cpf(
+     cpf in Eal_cliente_tab.Cpf%type 
+   
+   )
+   return varchar2;
+   
 end EAL_CLIENTE_API;
 /
 create or replace package body EAL_CLIENTE_API is
@@ -60,7 +72,10 @@ create or replace package body EAL_CLIENTE_API is
    procedure new___(
       cliente in EAL_CLIENTE_TAB%rowtype
    ) is
+     cliente_cpf_ret varchar2(255) := valida_cpf(cliente.cpf);
+     
    begin
+     dbms_output.put_line('cpf return ' || cliente_cpf_ret);
      if  cliente.cod_cliente is not null and 
          cliente.cod_cidade is not null and
          cliente.cod_estado is not null and 
@@ -76,7 +91,7 @@ create or replace package body EAL_CLIENTE_API is
            cliente.cod_estado,
            cliente.cod_pais,
            cliente.cliente_name,
-           cliente.cpf,
+           cliente_cpf_ret,
            cliente.rg,
            cliente.ativo
         );
@@ -209,8 +224,104 @@ create or replace package body EAL_CLIENTE_API is
    
    
    
+   function valida_cpf(
+     cpf in EAL_CLIENTE_TAB.cpf%type
+   ) return varchar2
+   is
+     ret varchar2(255);
+     sum1 number(32) := 0;
+     sum2 number(32) := 0;
+     repet varchar2(32767);
+     counter varchar2(10) := 10;
+     
+     e_invalid_cpf exception;
+     
+     digit1 varchar2(1);
+     digit2 varchar2(1);
+     
+     digits varchar2(255);
+   begin
+     for i in 1 .. length(cpf) loop
+       if (substr(cpf, i, 1)) between '0' and '9' then
+         repet := repet || (length(cpf) - length(replace(cpf, (substr(cpf, i, 1)), ''))) / length(cpf);
+         
+         ret := ret || substr(cpf, i, 1);
+     
+       end if;
+     end loop;
+     
+    
+  
+     
+     if length(ret) = 11 and repet is not null then
+        for i in 1 .. length(ret) loop
+            
+            if counter = 1 then
+              exit;
+            end if;  
+            sum1 := sum1 + substr(ret, i, 1) * counter;
+     
+            counter := counter - 1;
+        end loop;
+        
+       if mod(sum1, 11) < 2 then
+         digit1 := 0;
+       else
+         digit1 := 11 - mod(sum1,11);  
+       end if; 
+       
+     else
+       raise e_invalid_cpf;
+     end if;
+ 
+   counter := 11;
+   for i in 1 .. 10 loop
+     if counter = 1 then
+        exit;
+     end if;   
+     sum2 := sum2 + substr(ret, i, 1) * counter;
+     counter := counter - 1;
+     end loop;
+     
+     if mod(sum2, 11) < 2 then
+         digit2 := 0;
+       else
+         digit2 := 11 - mod(sum2,11);  
+     end if;
+     
    
    
+ 
+   
+   digits := digit1 || digit2;
+   if cpf like '%'||digits then
+      return ret;
+      
+   else
+     
+     raise e_invalid_cpf;    
+   end if;
+   exception
+     when e_invalid_cpf then
+       raise_application_error(-20001, 'ERROR: cpf is invalid');
+       
+   
+   
+   end valida_cpf;
+ 
+   function formata_cpf(
+     cpf in Eal_cliente_tab.Cpf%type 
+   
+   )return varchar2
+   is
+    ret varchar2(255);
+   begin
+     
+     SELECT REGEXP_REPLACE(cpf, '(\d{3})(\d{3})(\d{3})(\d{2})', '\1.\2.\3-\4') AS CPF_FORMATADO
+     INTO ret from dual;
+     dbms_output.put_line(ret);
+     return ret;
+   end formata_cpf;
    
    
 

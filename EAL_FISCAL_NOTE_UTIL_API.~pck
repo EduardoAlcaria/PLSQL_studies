@@ -1,0 +1,126 @@
+create or replace package EAL_FISCAL_NOTE_UTIL_API is
+
+   function CalculaValorTotalLinhaF(
+      item in EAL_NotaFiscalItem_Tab.Item%type
+    )return number;
+
+    function CalculaIcmsF(
+        nfi EAL_NOTAFISCALITEM_TAB%rowtype,
+        nf EAL_NOTAFISCAL_TAAB%rowtype
+
+     )return number;
+
+
+     FUNCTION CalculaIpiF(pItem EAL_NOTAFISCALITEM_TAB.Item%TYPE,
+                           pNota_Fiscal_Id EAL_NOTAFISCALITEM_TAB.NOTAFISCAL%TYPE
+                           )return number;
+                         
+     procedure product_collectionF(
+   tab out EAL_PRODUCT_TYPE_TAB
+  );  
+                           
+end EAL_FISCAL_NOTE_UTIL_API;
+/
+create or replace package body EAL_FISCAL_NOTE_UTIL_API is
+
+   function CalculaValorTotalLinhaF(
+      item in EAL_NotaFiscalItem_Tab.Item%type
+   )return number
+   is
+     ret number;
+   begin
+    
+     select (preco * qtyvenda) + icmsPerc + valorIcms + valorIpi + valorTotalTem into ret from EAL_NotaFiscalItem_Tab
+     where EAL_NotaFiscalItem_Tab.Item = item
+     FETCH FIRST 1 ROWS ONLY;
+     return ret;
+     
+
+   end CalculaValorTotalLinhaF;
+
+    function CalculaIcmsF(
+        nfi EAL_NOTAFISCALITEM_TAB%rowtype,
+        nf EAL_NOTAFISCAL_TAAB%rowtype
+        
+       )return number
+       is
+         vValor number;
+         begin
+           select (nfi.icmsperc / 100) * (nfi.Preco * nfi.QtyVenda)
+           into vValor
+           from EAL_NOTAFISCALITEM_TAB
+           where nf.fiscal_note = nfi.notafiscal
+           FETCH FIRST 1 ROWS ONLY;
+      
+
+           return vValor;
+         end CalculaIcmsF;
+         
+      FUNCTION CalculaIpiF(pitem EAL_NOTAFISCALITEM_TAB.ITEM%TYPE,
+                           pNota_Fiscal_Id EAL_NOTAFISCALITEM_TAB.NOTAFISCAL%TYPE)
+       RETURN NUMBER
+       IS
+         vValor NUMBER;
+         BEGIN
+           SELECT (valorIpi / 100) * (Preco * QtyVenda)
+           INTO vValor
+           FROM EAL_NOTAFISCALITEM_TAB
+           WHERE Item = pitem
+           AND notafiscal = pNota_Fiscal_Id;
+
+           RETURN vValor;
+         END CalculaIpiF;
+         
+     procedure product_collectionF(
+    tab out EAL_PRODUCT_TYPE_TAB  
+   )
+   is
+   begin
+     select EAL_PRODUCT_TYPE(codigo_produto, descprduto, preco)
+     bulk collect into tab
+     from EAL_PRODUTO_TAB;
+     
+   end product_collectionF;
+
+    procedure calcula_total(
+       tab out EAL_NOTAFISCALITEM_TYPE_TAB
+     )
+     is
+       acumun number;
+       vOld EAL_NOTAFISCAL_TAAB.VALORTOTAL%type;
+     begin
+       select EAL_NOTAFISCALITEM_TYPE(item,
+             notafiscal,
+             codigoProduto,
+             qtyVenda,
+             preco,
+             icmsPerc,
+             valorIcms,
+             valorIpi,
+             valorTotalTem )
+        bulk collect into tab
+        from EAL_NOTAFISCALITEM_TAB;
+        
+        for i in 1 .. tab.count loop
+         
+        
+       
+          select valortotal into vOld
+          from EAL_NOTAFISCAL_TAAB
+          where fiscal_note = (select max(fiscal_note) + 1 from EAL_NOTAFISCAL_TAAB)
+          fetch first 1 rowonly;
+    
+    
+
+          acumun := acumun + vOld + EAL_NOTAFISCALITEM_API.CalculaValorTotalLinha(tab(i).item);
+    
+                 
+         
+        dbms_output.put_line(acumun);
+        end loop;
+        
+     end calcula_total;
+
+
+end EAL_FISCAL_NOTE_UTIL_API;
+/

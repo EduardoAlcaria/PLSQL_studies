@@ -44,6 +44,10 @@ create or replace package body EAL_ESTOQUE_API is
       estoque in EAL_ESTOQUE_TAB%rowtype
    ) is
    begin
+     if estoque.qtyReservada is not null and 
+         estoque.codigAlmox is not null and 
+         estoque.qtyEmEstoque is not null and 
+         estoque.codigo_produto is not null then
       insert into EAL_ESTOQUE_TAB
       values (
          estoque.qtyReservada,
@@ -51,18 +55,24 @@ create or replace package body EAL_ESTOQUE_API is
          estoque.qtyEmEstoque,
          estoque.codigo_produto
       );
+     end if; 
    end new___;
 
    procedure modify___(
       estoque in EAL_ESTOQUE_TAB%rowtype
    ) is
    begin
-      update EAL_ESTOQUE_TAB
-      set
-         qtyReservada = estoque.qtyReservada,
-         qtyEmEstoque = estoque.qtyEmEstoque
-      where codigAlmox = estoque.codigAlmox
-        and codigo_produto = estoque.codigo_produto;
+       if estoque.qtyReservada is not null and 
+         estoque.codigAlmox is not null and 
+         estoque.qtyEmEstoque is not null and 
+         estoque.codigo_produto is not null then
+          update EAL_ESTOQUE_TAB
+          set
+             qtyReservada = estoque.qtyReservada,
+             qtyEmEstoque = estoque.qtyEmEstoque
+          where codigAlmox = estoque.codigAlmox
+            and codigo_produto = estoque.codigo_produto;
+        end if;
    end modify___;
 
    procedure delete___(

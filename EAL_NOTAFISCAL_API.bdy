@@ -1,0 +1,96 @@
+create or replace package body EAL_NOTAFISCAL_API is
+
+   procedure new___(
+      nf in EAL_NOTAFISCAL_TAAB%rowtype
+   ) is
+   begin
+     if  nf.fiscal_note is not null and 
+         nf.serialNF   is not null and 
+         nf.cFop   is not null and 
+         nf.valorTotal   is not null then
+          insert into EAL_NOTAFISCAL_TAAB
+          values (
+             nf.fiscal_note,
+             nf.serialNF,
+             nf.cFop,
+             nf.valorTotal
+          );
+      end if;
+   end new___;
+
+   procedure modify___(
+      nf in EAL_NOTAFISCAL_TAAB%rowtype
+   ) is
+   begin
+      if  nf.fiscal_note is not null and 
+         nf.serialNF   is not null and 
+         nf.cFop   is not null and 
+             nf.valorTotal   is not null then
+          update EAL_NOTAFISCAL_TAAB
+          set
+             serialNF = nf.serialNF,
+             cFop = nf.cFop,
+             valorTotal = nf.valorTotal
+          where fiscal_note = EAL_NOTAFISCAL_TAAB.fiscal_note;
+      end if;    
+   end modify___;
+
+   procedure delete___(
+      fiscal_note in EAL_NOTAFISCAL_TAAB.fiscal_note%type
+   ) is
+   begin
+      delete from EAL_NOTAFISCAL_TAAB
+      where fiscal_note = EAL_NOTAFISCAL_TAAB.fiscal_note;
+   end delete___;
+
+   function get___(
+      fiscal_note in EAL_NOTAFISCAL_TAAB.fiscal_note%type
+   ) return EAL_NOTAFISCAL_TAAB%rowtype
+   is
+      ret EAL_NOTAFISCAL_TAAB%rowtype;
+   begin
+      select * into ret from EAL_NOTAFISCAL_TAAB
+      where fiscal_note = EAL_NOTAFISCAL_TAAB.fiscal_note;
+      return ret;
+   end get___;
+   
+   function get_serial___(
+      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
+    )return varchar2
+    is
+     ret varchar2(255);
+    begin
+      select serialNF into ret from EAL_NOTAFISCAL_TAAB
+      where fiscal_note = EAL_NOTAFISCAL_TAAB.FISCAL_NOTE;
+      return ret;
+    
+    end get_serial___;
+    
+   function get_cFop___(
+      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
+    )return varchar2
+    is
+     ret varchar2(255);
+    begin
+      select cFop into ret from EAL_NOTAFISCAL_TAAB
+      where fiscal_note = EAL_NOTAFISCAL_TAAB.FISCAL_NOTE;
+      return ret;
+    
+    end get_cFop___;
+    
+   function get_valorTotal___(
+      fiscal_note in EAL_NotaFiscal_Taab.Fiscal_Note%type
+   )return number
+    is
+     ret number(25);
+    begin
+      select valorTotal into ret from EAL_notafiscal_TAAB
+      where fiscal_note = EAL_NOTAFISCAL_TAAB.FISCAL_NOTE
+      fetch first 1 row only;
+      return ret;
+
+   end get_valorTotal___;
+   
+   
+end EAL_NOTAFISCAL_API;
+/

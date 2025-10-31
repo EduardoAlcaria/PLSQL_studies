@@ -32,7 +32,7 @@ create or replace package EAL_ESTOQUE_API is
    function get_QTYEMESTOQUE___(
      codigAlmox in EAL_ESTOQUE_TAB.codigAlmox%type
    ) return number;
-   
+    
    
      
 
@@ -144,7 +144,8 @@ create or replace package body EAL_ESTOQUE_API is
    
    end get_QTYEMESTOQUE___;
    
-  
+
+
 
 end EAL_ESTOQUE_API;
 /

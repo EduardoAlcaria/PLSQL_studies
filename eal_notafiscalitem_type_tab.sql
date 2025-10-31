@@ -1,0 +1,1 @@
+create or replace type EAL_NOTAFISCALITEM_TYPE_TAB as table of EAL_NOTAFISCALITEM_TYPE;

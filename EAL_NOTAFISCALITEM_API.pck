@@ -73,7 +73,10 @@ create or replace package EAL_NOTAFISCALITEM_API is
                  pNota_Fiscal_Id  EAL_NOTAFISCALITEM_TAB.notafiscal%TYPE
                  )
          RETURN EAL_NOTAFISCALITEM_TAB.ValorTotaltem%TYPE;
-
+     
+     procedure calcula_total(
+      tab out EAL_NOTAFISCALITEM_TYPE_TAB
+     );
 
 end EAL_NOTAFISCALITEM_API;
 /
@@ -325,6 +328,31 @@ create or replace package body EAL_NOTAFISCALITEM_API is
            RETURN myVar;
          END GetValorTotalItem___;    
 
+      procedure calcula_total(
+       tab out EAL_NOTAFISCALITEM_TYPE_TAB
+     )
+     is
+       acumun number;
+     begin
+       select EAL_NOTAFISCALITEM_TYPE(item,
+             notafiscal,
+             codigoProduto,
+             qtyVenda,
+             preco,
+             icmsPerc,
+             valorIcms,
+             valorIpi,
+             valorTotalTem )
+        bulk collect into tab
+        from EAL_NOTAFISCALITEM_TAB;
+        
+        for i in 1 .. tab.count loop
+          acumun := acumun + EAL_NOTAFISCALITEM_API.CalculaValorTotalLinha(tab(i).item);
+        
+        dbms_output.put_line(acumun);
+        end loop;     
 
+
+     end calcula_total;
 end EAL_NOTAFISCALITEM_API;
 /
