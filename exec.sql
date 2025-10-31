@@ -22,11 +22,19 @@ begin
  
  
 
- dbms_output.put_line(EAL_FISCAL_NOTE_UTIL_API.calcula_totalF(tab));
- 
- select * from eal_notafiscalitem_tab;
+ EAL_FISCAL_NOTE_UTIL_API.calcula_totalF(tab);
  
  
+ 
+ ret := EAL_EMPRESA_API.formata_cnpj('123-45678912345');
+ dbms_output.put_line('CNPJ ' || ret);
+ 
+ ret := EAL_EMPRESA_API.formata_cep('9447-0550');
+ dbms_output.put_line('CEP ' || ret);
+ 
+ 
+ 
+ select * from EAL_EMPRESA;
  
  --select * from eal_cliente_Tab;
  --aselect * from eal_produto;

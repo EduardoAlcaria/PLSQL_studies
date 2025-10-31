@@ -30,6 +30,16 @@ create or replace package EAL_EMPRESA_API is
 
        FUNCTION GetComplemento___(pCodigo_Emp_Id EAL_EMPRESA_TAB.Cod_Emp_Id%TYPE)
          RETURN EAL_EMPRESA_TAB.Complemento%TYPE;
+         
+         
+          function formata_cnpj(
+         cnpj in Eal_empresa_tab.Cnpj%type 
+   
+       )return varchar2;
+       
+       function formata_cep(
+       cep in EAL_EMPRESA_TAB.cep%type
+     )return varchar2;
 
     
     
@@ -172,6 +182,34 @@ create or replace package body EAL_EMPRESA_API is
 
            RETURN vCompl;
          END GetComplemento___;
+       
+       function formata_cnpj(
+         cnpj in Eal_empresa_tab.Cnpj%type 
+   
+       )return varchar2
+       is
+        cnpj_clean varchar2(255);
+       begin
+         
+        cnpj_clean := regexp_replace(cnpj, '[^0-9]', '');
+        return REGEXP_REPLACE(cnpj_clean, '(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})', '\1.\2.\3/\4-\5');
+        
+   end formata_cnpj;
+   
+   function formata_cep(
+       cep in EAL_EMPRESA_TAB.cep%type
+     )return varchar2
+     is
+      cep_clean varchar2(255);
+     begin
+       cep_clean := regexp_replace(cep, '[^0-9]', '');
+       
+       return REGEXP_REPLACE(cep_clean, '(\d{5})(\d({3}))', '\1-\2');
+       
+     
+   end formata_cep;     
+     
+     
 
 end EAL_EMPRESA_API;
 /
